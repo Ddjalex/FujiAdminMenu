@@ -48,19 +48,19 @@ while ($item = $stmt->fetch()) {
         </div>
         
         <nav class="sidebar-nav">
-            <a href="#" class="sidebar-link">
+            <a href="#menu" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">🍽️</span>
                 <span>Menu</span>
             </a>
-            <a href="#feedback" class="sidebar-link">
+            <a href="#feedback" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">💬</span>
                 <span>Feedback</span>
             </a>
-            <a href="#contact" class="sidebar-link">
+            <a href="#contact" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">📞</span>
                 <span>Contact Us</span>
             </a>
-            <a href="#review" class="sidebar-link">
+            <a href="#review" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">⭐</span>
                 <span>Review</span>
             </a>
@@ -104,7 +104,7 @@ while ($item = $stmt->fetch()) {
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="menu">
         <div class="toolbar">
             <div class="pill-tabs">
                 <button class="pill active" data-cat="all">All Items</button>
@@ -172,6 +172,54 @@ while ($item = $stmt->fetch()) {
                 <p>No menu items available at the moment.</p>
             </div>
         <?php endif; ?>
+        
+        <section id="feedback" style="margin-top: 60px; padding: 40px; background: white; border-radius: 16px; box-shadow: var(--shadow);">
+            <h2 class="section-title">Feedback</h2>
+            <p style="color: var(--muted); margin-bottom: 24px;">We value your feedback! Let us know how we can improve your experience.</p>
+            <form style="max-width: 600px;">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Feedback</label>
+                    <textarea placeholder="Share your thoughts with us..." rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </form>
+        </section>
+        
+        <section id="contact" style="margin-top: 40px; padding: 40px; background: white; border-radius: 16px; box-shadow: var(--shadow);">
+            <h2 class="section-title">Contact Us</h2>
+            <div style="display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">📍 Location</h3>
+                    <p style="color: var(--muted);">123 Coffee Street<br>Addis Ababa, Ethiopia</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">📞 Phone</h3>
+                    <p style="color: var(--muted);">+251 11 123 4567<br>+251 91 234 5678</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">⏰ Hours</h3>
+                    <p style="color: var(--muted);">Mon-Fri: 7:00 AM - 8:00 PM<br>Sat-Sun: 8:00 AM - 9:00 PM</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">✉️ Email</h3>
+                    <p style="color: var(--muted);">info@fujicafe.com<br>support@fujicafe.com</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="review" style="margin: 40px 0 60px; padding: 40px; background: white; border-radius: 16px; box-shadow: var(--shadow);">
+            <h2 class="section-title">Leave a Review</h2>
+            <p style="color: var(--muted); margin-bottom: 24px;">Share your experience with us and help others discover great items!</p>
+            <p style="color: var(--text);">Click the "Reviews" button on any menu item above to leave your feedback.</p>
+        </section>
     </div>
 
     <div id="reviewModal" class="modal">
