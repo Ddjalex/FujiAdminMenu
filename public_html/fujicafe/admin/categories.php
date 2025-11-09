@@ -2,6 +2,8 @@
 require_once dirname(__DIR__) . '/includes/boot.php';
 require_once dirname(__DIR__) . '/includes/helpers.php';
 
+require_admin_auth();
+
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 $errors = [];

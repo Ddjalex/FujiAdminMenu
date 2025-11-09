@@ -65,8 +65,19 @@ function upload_image($file, $upload_dir = 'assets/uploads/') {
     $filepath = $upload_path . $filename;
     
     if (move_uploaded_file($file['tmp_name'], $filepath)) {
-        return ['success' => true, 'url' => '/' . ltrim($upload_dir, '/') . $filename];
+        return ['success' => true, 'url' => '/fujicafe/' . ltrim($upload_dir, '/') . $filename];
     }
     
     return ['error' => 'Failed to save file'];
+}
+
+function require_admin_auth() {
+    if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+        header('Location: /fujicafe/admin/login.php');
+        exit;
+    }
+}
+
+function is_admin_logged_in() {
+    return isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 }

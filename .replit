@@ -1,2 +1,39 @@
+modules = ["php-8.3", "php-8.2", "postgresql-16"]
 [agent]
 expertMode = true
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "fuji-cafe-server"
+
+[[workflows.workflow]]
+name = "fuji-cafe-server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "php -S 0.0.0.0:5000 -t public_html"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 33735
+externalPort = 3000
+
+[nix]
+channel = "stable-25_05"
+packages = ["php82Extensions.pgsql", "php82Extensions.pdo_pgsql"]

@@ -2,6 +2,8 @@
 require_once dirname(__DIR__) . '/includes/boot.php';
 require_once dirname(__DIR__) . '/includes/helpers.php';
 
+require_admin_auth();
+
 $categories_count = $pdo->query("SELECT COUNT(*) FROM menu_categories")->fetchColumn();
 $items_count = $pdo->query("SELECT COUNT(*) FROM menu_items")->fetchColumn();
 $active_items = $pdo->query("SELECT COUNT(*) FROM menu_items WHERE is_active = 1")->fetchColumn();
@@ -16,8 +18,13 @@ $active_items = $pdo->query("SELECT COUNT(*) FROM menu_items WHERE is_active = 1
 </head>
 <body class="ui">
     <div class="container">
-        <h1>Fuji Cafe Admin</h1>
-        <p class="muted">Manage your digital menu</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div>
+                <h1 style="margin-bottom: 4px;">Fuji Cafe Admin</h1>
+                <p class="muted">Manage your digital menu</p>
+            </div>
+            <a href="logout.php" style="padding: 8px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">Logout</a>
+        </div>
 
         <?php if ($msg = flash('success')): ?>
             <div style="background: #1a3a1a; border: 1px solid #2a5a2a; color: #90ee90; padding: 10px; border-radius: 10px; margin: 16px 0;">

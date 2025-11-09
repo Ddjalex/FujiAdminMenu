@@ -2,6 +2,8 @@
 require_once dirname(__DIR__) . '/includes/boot.php';
 require_once dirname(__DIR__) . '/includes/helpers.php';
 
+require_admin_auth();
+
 $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 $errors = [];
@@ -26,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         if (!empty($_FILES['image']['name'])) {
-            $upload_result = upload_image($_FILES['image'], 'fujicafe/assets/uploads/');
+            $upload_result = upload_image($_FILES['image'], 'assets/uploads/');
             if (isset($upload_result['error'])) {
                 $errors['image'] = $upload_result['error'];
             } else {

@@ -1,0 +1,23 @@
+# PHP
+vendor/
+composer.phar
+*.log
+
+# Uploads
+public_html/fujicafe/assets/uploads/*
+!public_html/fujicafe/assets/uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
