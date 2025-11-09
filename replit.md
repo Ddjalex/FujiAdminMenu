@@ -14,7 +14,8 @@ public_html/fujicafe/
 ├── admin/
 │   ├── index.php            # Admin dashboard
 │   ├── categories.php       # Category CRUD
-│   └── items.php            # Menu items CRUD
+│   ├── items.php            # Menu items CRUD
+│   └── settings.php         # Restaurant settings & logo upload
 ├── assets/
 │   ├── css/
 │   │   ├── menu.css        # Public menu styles
@@ -28,6 +29,7 @@ public_html/fujicafe/
 - **menu_categories**: id, name, position, created_at
 - **menu_items**: id, category_id, name, price, description, image_url, is_active, position, created_at, updated_at
 - **menu_item_reviews**: id, item_id, customer_name, rating, comment, created_at
+- **restaurant_settings**: id, logo_url, restaurant_name, restaurant_subtitle, created_at, updated_at
 
 ## Setup Instructions
 
@@ -58,6 +60,10 @@ mysql -u root -p fujicafe < public_html/fujicafe/schema.sql
 - Search and category filtering
 - Social media links (Facebook, Instagram, TikTok)
 - Keyboard navigation support (Escape key closes sidebar)
+- Restaurant branding customization:
+  - Logo upload with secure validation
+  - Restaurant name and subtitle configuration
+  - Automatic fallback to initials when no logo is uploaded
 - CSRF protection on all forms
 - Server-side validation
 - Engaging animations:
@@ -78,10 +84,24 @@ mysql -u root -p fujicafe < public_html/fujicafe/schema.sql
 - CSRF tokens on all POST requests
 - Server-side input validation
 - Prepared SQL statements (SQL injection prevention)
-- File upload validation (type and size)
+- File upload validation:
+  - getimagesize() validation to verify actual image content
+  - Extension whitelisting (jpg, png, gif, webp only)
+  - Forced safe extensions based on image type, not user input
+  - File size limits (5MB for logos)
+  - .htaccess protection to prevent PHP execution in uploads directory
 - htmlspecialchars for output escaping
 
 ## Recent Changes
+- 2025-11-09: Logo upload and restaurant branding feature
+  - Created restaurant_settings table for branding customization
+  - Added admin/settings.php page with logo upload functionality
+  - Implemented secure file upload validation using getimagesize()
+  - Added .htaccess protection in uploads directory to prevent PHP execution
+  - Logo displays in hero section and sidebar with fallback to initials
+  - Restaurant name and subtitle now configurable from admin panel
+  - Fixed critical security vulnerability in file upload (RCE prevention)
+
 - 2025-11-09: Initial setup with complete CRUD functionality
   - PostgreSQL database setup with schema_postgres.sql
   - Created menu_categories, menu_items, and menu_item_reviews tables
