@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/includes/boot.php';
 
+$settings = $pdo->query("SELECT * FROM restaurant_settings LIMIT 1")->fetch();
+if (!$settings) {
+    $settings = ['restaurant_name' => 'Fuji Cafe', 'restaurant_subtitle' => 'Artisan Coffee & Fresh Cuisine', 'logo_url' => null];
+}
+
 $categories = $pdo->query("SELECT * FROM menu_categories ORDER BY position ASC, name ASC")->fetchAll();
 
 $items_by_category = [];
@@ -41,8 +46,14 @@ while ($item = $stmt->fetch()) {
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <div class="tenant-logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: white;">FC</div>
-                <span style="font-size: 18px; font-weight: bold; margin-left: 12px;">Fuji Cafe</span>
+                <?php if ($settings['logo_url']): ?>
+                    <img src="<?= ASSETS_URL . '/../' . e($settings['logo_url']) ?>" alt="Logo" class="tenant-logo" style="width: 40px; height: 40px; object-fit: contain; background: white; padding: 4px;">
+                <?php else: ?>
+                    <div class="tenant-logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: white;">
+                        <?= strtoupper(substr($settings['restaurant_name'], 0, 2)) ?>
+                    </div>
+                <?php endif; ?>
+                <span style="font-size: 18px; font-weight: bold; margin-left: 12px;"><?= e($settings['restaurant_name']) ?></span>
             </div>
             <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
         </div>
@@ -95,10 +106,16 @@ while ($item = $stmt->fetch()) {
     <div class="hero">
         <div class="container">
             <div class="brand">
-                <div class="tenant-logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white;">FC</div>
+                <?php if ($settings['logo_url']): ?>
+                    <img src="<?= ASSETS_URL . '/../' . e($settings['logo_url']) ?>" alt="Logo" class="tenant-logo" style="width: 64px; height: 64px; object-fit: contain; background: white; padding: 8px;">
+                <?php else: ?>
+                    <div class="tenant-logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white;">
+                        <?= strtoupper(substr($settings['restaurant_name'], 0, 2)) ?>
+                    </div>
+                <?php endif; ?>
                 <div>
-                    <h1 class="h2">Fuji Cafe</h1>
-                    <p class="subtitle">Artisan Coffee & Fresh Cuisine</p>
+                    <h1 class="h2"><?= e($settings['restaurant_name']) ?></h1>
+                    <p class="subtitle"><?= e($settings['restaurant_subtitle']) ?></p>
                 </div>
             </div>
         </div>
