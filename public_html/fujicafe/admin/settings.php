@@ -25,26 +25,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $logo_url = $settings['logo_url'];
     
     if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         $max_size = 5 * 1024 * 1024;
-        
-        if (!in_array($_FILES['logo']['type'], $allowed_types)) {
-            flash('error', 'Logo must be a JPG, PNG, GIF, or WEBP image');
-            redirect('settings.php');
-        }
         
         if ($_FILES['logo']['size'] > $max_size) {
             flash('error', 'Logo file size must not exceed 5MB');
             redirect('settings.php');
         }
         
+        $image_info = getimagesize($_FILES['logo']['tmp_name']);
+        if ($image_info === false) {
+            flash('error', 'Uploaded file is not a valid image');
+            redirect('settings.php');
+        }
+        
+        $allowed_types = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP];
+        if (!in_array($image_info[2], $allowed_types)) {
+            flash('error', 'Logo must be a JPG, PNG, GIF, or WEBP image');
+            redirect('settings.php');
+        }
+        
+        $extension_map = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_GIF => 'gif',
+            IMAGETYPE_WEBP => 'webp'
+        ];
+        $safe_ext = $extension_map[$image_info[2]];
+        
         $upload_dir = dirname(__DIR__) . '/assets/uploads/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755, true);
         }
         
-        $ext = pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
-        $filename = 'logo_' . time() . '.' . $ext;
+        $filename = 'logo_' . time() . '.' . $safe_ext;
         $target = $upload_dir . $filename;
         
         if (move_uploaded_file($_FILES['logo']['tmp_name'], $target)) {
