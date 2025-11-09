@@ -118,7 +118,7 @@ $csrf_token = generate_csrf_token();
                             <div style="flex: 1; min-width: 0;">
                                 <div class="card-title"><?= e($item['name']) ?></div>
                                 <div class="muted" style="font-size: 14px;">
-                                    <?= e($item['category_name'] ?? 'No category') ?> | $<?= number_format($item['price'], 2) ?> | 
+                                    <?= e($item['category_name'] ?? 'No category') ?> | ETB <?= number_format($item['price'], 2) ?> | 
                                     <?= $item['is_active'] ? '<span style="color: #90ee90;">Active</span>' : '<span style="color: #ffd2d2;">Inactive</span>' ?>
                                 </div>
                             </div>

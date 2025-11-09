@@ -95,7 +95,7 @@ while ($item = $stmt->fetch()) {
                                 <?php endif; ?>
                                 
                                 <div class="row">
-                                    <span class="price">$<?= number_format($item['price'], 2) ?></span>
+                                    <span class="price">ETB <?= number_format($item['price'], 2) ?></span>
                                     <button class="btn btn-outline" onclick="openReviewModal(<?= $item['id'] ?>, '<?= e($item['name']) ?>')">
                                         Reviews
                                     </button>
