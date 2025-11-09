@@ -85,7 +85,7 @@ while ($item = $stmt->fetch()) {
                 </a>
             </div>
             <div class="powered-by">
-                <span>🍕 Powered by AbayQR</span>
+                <span>Powered by <a href="https://neodigitalsolutions.com/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600;">neodigitalsolutions.com</a></span>
             </div>
         </div>
     </div>
