@@ -27,6 +27,7 @@ public_html/fujicafe/
 ## Database Schema
 - **menu_categories**: id, name, position, created_at
 - **menu_items**: id, category_id, name, price, description, image_url, is_active, position, created_at, updated_at
+- **menu_item_reviews**: id, item_id, customer_name, rating, comment, created_at
 
 ## Setup Instructions
 
@@ -47,13 +48,23 @@ mysql -u root -p fujicafe < public_html/fujicafe/schema.sql
 - **Admin Panel**: http://localhost:5000/fujicafe/admin/
 
 ### 3. Features
-- Modern dark-themed responsive UI
+- Modern dark-themed responsive UI with smooth animations
+- Slide-out sidebar navigation with hamburger menu
+- Smooth page sections: Menu, Feedback, Contact Us, and Reviews
 - Category management with position ordering
 - Menu item management with image upload
+- Customer reviews and ratings system
 - Active/inactive item toggle
 - Search and category filtering
+- Social media links (Facebook, Instagram, TikTok)
+- Keyboard navigation support (Escape key closes sidebar)
 - CSRF protection on all forms
 - Server-side validation
+- Engaging animations:
+  - Fade-in animations for menu cards
+  - Slide-in animations for category pills
+  - Smooth scrolling between sections
+  - Hover effects on all interactive elements
 
 ## Development Notes
 - PHP 8.3+
@@ -72,6 +83,14 @@ mysql -u root -p fujicafe < public_html/fujicafe/schema.sql
 
 ## Recent Changes
 - 2025-11-09: Initial setup with complete CRUD functionality
-- Modern dark UI implementation
-- Admin panel with category and item management
-- Image upload capability for menu items
+  - PostgreSQL database setup with schema_postgres.sql
+  - Created menu_categories, menu_items, and menu_item_reviews tables
+  - Modern dark UI implementation
+  - Admin panel with category and item management
+  - Image upload capability for menu items
+  - Slide-out sidebar navigation with hamburger menu
+  - Added Feedback, Contact Us, and Review sections
+  - Smooth animations throughout the site (fade-in, slide-in, hover effects)
+  - Social media integration (Facebook, Instagram, TikTok)
+  - Customer reviews and ratings system
+  - Keyboard navigation support (Escape key closes sidebar)
