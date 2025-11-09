@@ -324,6 +324,31 @@ while ($item = $stmt->fetch()) {
                 closeReviewModal();
             }
         });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.querySelector('.hamburger-btn');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+            hamburger.classList.toggle('active');
+            
+            if (sidebar.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar.classList.contains('open')) {
+                    toggleSidebar();
+                }
+            }
+        });
     </script>
 </body>
 </html>
