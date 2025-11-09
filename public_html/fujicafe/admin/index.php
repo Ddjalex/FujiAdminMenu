@@ -74,6 +74,12 @@ $recent_reviews = $pdo->query("
                 <p class="muted">View the customer-facing menu</p>
                 <a href="../index.php" target="_blank">View Menu →</a>
             </div>
+
+            <div class="card">
+                <div class="card-title">Restaurant Settings</div>
+                <p class="muted">Manage logo and restaurant info</p>
+                <a href="settings.php">Manage Settings →</a>
+            </div>
         </div>
 
         <div class="mt">
