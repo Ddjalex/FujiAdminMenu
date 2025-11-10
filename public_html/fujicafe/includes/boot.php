@@ -4,6 +4,7 @@ session_start();
 
 // Base paths
 define('BASE_PATH', dirname(__DIR__));
+define('BASE_URL', '/fujicafe');
 define('ASSETS_URL', '/fujicafe/assets');
 
 // Include database connection

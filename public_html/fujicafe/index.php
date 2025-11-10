@@ -321,7 +321,7 @@ while ($item = $stmt->fetch()) {
         }
 
         function loadReviews(itemId) {
-            fetch(`reviews.php?item_id=${itemId}`)
+            fetch(`<?= BASE_URL ?>/reviews.php?item_id=${itemId}`)
                 .then(res => res.json())
                 .then(reviews => {
                     const container = document.getElementById('reviewsList');
@@ -359,7 +359,7 @@ while ($item = $stmt->fetch()) {
             e.preventDefault();
             const formData = new FormData(e.target);
             
-            fetch('reviews.php', {
+            fetch('<?= BASE_URL ?>/reviews.php', {
                 method: 'POST',
                 body: formData
             })
