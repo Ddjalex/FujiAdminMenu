@@ -33,7 +33,7 @@ $recent_reviews = $pdo->query("
                 <h1 style="margin-bottom: 4px;">Fuji Cafe Admin</h1>
                 <p class="muted">Manage your digital menu</p>
             </div>
-            <a href="logout.php" style="padding: 8px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">Logout</a>
+            <a href="<?= BASE_URL ?>/admin/logout.php" style="padding: 8px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">Logout</a>
         </div>
 
         <?php if ($msg = flash('success')): ?>
@@ -46,14 +46,14 @@ $recent_reviews = $pdo->query("
             <div class="card">
                 <div class="card-title">Categories</div>
                 <div style="font-size: 32px; font-weight: bold; margin: 8px 0;"><?= $categories_count ?></div>
-                <a href="categories.php">Manage Categories →</a>
+                <a href="<?= BASE_URL ?>/admin/categories.php">Manage Categories →</a>
             </div>
 
             <div class="card">
                 <div class="card-title">Menu Items</div>
                 <div style="font-size: 32px; font-weight: bold; margin: 8px 0;"><?= $items_count ?></div>
                 <div class="muted" style="font-size: 14px;"><?= $active_items ?> active</div>
-                <a href="items.php">Manage Items →</a>
+                <a href="<?= BASE_URL ?>/admin/items.php">Manage Items →</a>
             </div>
 
             <div class="card">
@@ -66,27 +66,27 @@ $recent_reviews = $pdo->query("
                         No reviews yet
                     <?php endif; ?>
                 </div>
-                <a href="reviews_mgmt.php">Manage Reviews →</a>
+                <a href="<?= BASE_URL ?>/admin/reviews_mgmt.php">Manage Reviews →</a>
             </div>
 
             <div class="card">
                 <div class="card-title">Public Menu</div>
                 <p class="muted">View the customer-facing menu</p>
-                <a href="../index.php" target="_blank">View Menu →</a>
+                <a href="<?= BASE_URL ?>/index.php" target="_blank">View Menu →</a>
             </div>
 
             <div class="card">
                 <div class="card-title">Restaurant Settings</div>
                 <p class="muted">Manage logo and restaurant info</p>
-                <a href="settings.php">Manage Settings →</a>
+                <a href="<?= BASE_URL ?>/admin/settings.php">Manage Settings →</a>
             </div>
         </div>
 
         <div class="mt">
             <h2>Quick Actions</h2>
             <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;">
-                <a href="categories.php?action=create" style="padding: 10px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: inline-block;">+ New Category</a>
-                <a href="items.php?action=create" style="padding: 10px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: inline-block;">+ New Menu Item</a>
+                <a href="<?= BASE_URL ?>/admin/categories.php?action=create" style="padding: 10px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: inline-block;">+ New Category</a>
+                <a href="<?= BASE_URL ?>/admin/items.php?action=create" style="padding: 10px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; display: inline-block;">+ New Menu Item</a>
             </div>
         </div>
 
@@ -113,7 +113,7 @@ $recent_reviews = $pdo->query("
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <a href="reviews_mgmt.php" style="display: inline-block; margin-top: 8px; padding: 8px 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">View All Reviews →</a>
+                <a href="<?= BASE_URL ?>/admin/reviews_mgmt.php" style="display: inline-block; margin-top: 8px; padding: 8px 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-size: 14px;">View All Reviews →</a>
             </div>
         </div>
         <?php endif; ?>
