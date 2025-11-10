@@ -100,9 +100,9 @@ while ($item = $stmt->fetch()) {
                 </a>
             </div>
             <div class="powered-by">
-                <a href="https://www.facebook.com/NeoPrintingandAdvertising" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: var(--muted); transition: all .3s ease;">
-                    <img src="<?= ASSETS_URL ?>/uploads/neo-logo.png" alt="Neo Printing and Advertising" style="height: 32px; width: auto; transition: transform .3s ease;">
-                    <span style="font-size: 11px;">Powered by Neo Printing and Advertising</span>
+                <a href="https://neodigitalsolutions.com" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: var(--muted); transition: all .3s ease;">
+                    <img src="<?= ASSETS_URL ?>/uploads/neo-logo.png" alt="Neo Digital Solution" style="height: 32px; width: auto; transition: transform .3s ease;">
+                    <span style="font-size: 11px;">Powered by Neo Digital Solution</span>
                 </a>
             </div>
         </div>

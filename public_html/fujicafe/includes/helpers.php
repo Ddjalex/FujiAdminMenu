@@ -81,3 +81,15 @@ function require_admin_auth() {
 function is_admin_logged_in() {
     return isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 }
+
+function csrf_field() {
+    $token = generate_csrf_token();
+    return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
+}
+
+function csrf_validate() {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        flash('error', 'Invalid security token');
+        redirect($_SERVER['HTTP_REFERER'] ?? '/fujicafe/admin/');
+    }
+}
