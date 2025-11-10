@@ -153,6 +153,8 @@ html,body{margin:0;padding:0;font:16px/1.6 'Inter',system-ui,-apple-system,Blink
 .social-icon:hover{background:var(--accent);color:white;transform:translateY(-3px) scale(1.1);box-shadow:0 6px 12px rgba(231,76,60,.25);border-color:var(--accent)}
 .social-icon:active{transform:translateY(-1px) scale(1.05)}
 .powered-by{text-align:center;font-size:13px;color:var(--muted);font-weight:500}
+.powered-by a:hover{color:var(--accent)}
+.powered-by a:hover img{transform:scale(1.05)}
 
 .card{animation:fadeInUp .6s ease forwards;opacity:0}
 .card:nth-child(1){animation-delay:.1s}
@@ -187,3 +189,9 @@ html,body{margin:0;padding:0;font:16px/1.6 'Inter',system-ui,-apple-system,Blink
   .sidebar{width:85%;max-width:300px}
   .hamburger-btn{width:42px;height:42px;top:14px;left:14px}
 }
+
+.language-toggle{display:flex;gap:8px;border-top:1px solid var(--border);padding-top:16px;margin-top:16px}
+.lang-btn{flex:1;padding:10px 12px;border-radius:10px;border:2px solid var(--border);background:white;color:var(--text);cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all .25s cubic-bezier(.4,0,.2,1);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.lang-btn:hover{background:rgba(231,76,60,.05);border-color:var(--accent);color:var(--accent);transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.lang-btn:active{transform:scale(0.98) translateY(0)}
+.lang-btn.active{background:var(--accent);color:white;border-color:var(--accent);box-shadow:0 4px 8px rgba(231,76,60,.25)}

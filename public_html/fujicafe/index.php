@@ -10,18 +10,18 @@ $categories = $pdo->query("SELECT * FROM menu_categories ORDER BY position ASC, 
 
 $items_by_category = [];
 $stmt = $pdo->query("
-    SELECT mi.id, mi.category_id, mi.name, mi.price, mi.description, mi.image_url, 
+    SELECT mi.id, mi.category_id, mi.name, mi.name_am, mi.price, mi.description, mi.description_am, mi.image_url, 
            mi.is_active, mi.position, mi.created_at, mi.updated_at,
-           mc.name as category_name, mc.position as cat_position,
+           mc.name as category_name, mc.name_am as category_name_am, mc.position as cat_position,
            COALESCE(AVG(r.rating), 0) as avg_rating,
            COUNT(r.id) as review_count
     FROM menu_items mi 
     JOIN menu_categories mc ON mi.category_id = mc.id 
     LEFT JOIN menu_item_reviews r ON mi.id = r.item_id
     WHERE mi.is_active = 1 
-    GROUP BY mi.id, mi.category_id, mi.name, mi.price, mi.description, mi.image_url,
+    GROUP BY mi.id, mi.category_id, mi.name, mi.name_am, mi.price, mi.description, mi.description_am, mi.image_url,
              mi.is_active, mi.position, mi.created_at, mi.updated_at,
-             mc.name, mc.position
+             mc.name, mc.name_am, mc.position
     ORDER BY mc.position ASC, mi.position ASC, mi.name ASC
 ");
 while ($item = $stmt->fetch()) {
@@ -61,20 +61,24 @@ while ($item = $stmt->fetch()) {
         <nav class="sidebar-nav">
             <a href="#menu" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">🍽️</span>
-                <span>Menu</span>
+                <span data-translate="menu">Menu</span>
             </a>
             <a href="#feedback" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">💬</span>
-                <span>Feedback</span>
+                <span data-translate="feedback">Feedback</span>
             </a>
             <a href="#contact" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">📞</span>
-                <span>Contact Us</span>
+                <span data-translate="contact">Contact Us</span>
             </a>
             <a href="#review" class="sidebar-link" onclick="toggleSidebar()">
                 <span class="icon">⭐</span>
-                <span>Review</span>
+                <span data-translate="review">Review</span>
             </a>
+            <div class="language-toggle" style="margin-top: 20px; padding: 0 20px;">
+                <button class="lang-btn" onclick="switchLanguage('en')" id="btnEn">English</button>
+                <button class="lang-btn" onclick="switchLanguage('am')" id="btnAm">አማርኛ</button>
+            </div>
         </nav>
         
         <div class="sidebar-footer">
@@ -96,7 +100,10 @@ while ($item = $stmt->fetch()) {
                 </a>
             </div>
             <div class="powered-by">
-                <span>Powered by <a href="https://neodigitalsolutions.com/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600;">neodigitalsolutions.com</a></span>
+                <a href="https://www.facebook.com/NeoPrintingandAdvertising" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: var(--muted); transition: all .3s ease;">
+                    <img src="<?= ASSETS_URL ?>/uploads/neo-logo.png" alt="Neo Printing and Advertising" style="height: 32px; width: auto; transition: transform .3s ease;">
+                    <span style="font-size: 11px;">Powered by Neo Printing and Advertising</span>
+                </a>
             </div>
         </div>
     </div>
@@ -115,7 +122,7 @@ while ($item = $stmt->fetch()) {
                 <?php endif; ?>
                 <div>
                     <h1 class="h2"><?= e($settings['restaurant_name']) ?></h1>
-                    <p class="subtitle"><?= e($settings['restaurant_subtitle']) ?></p>
+                    <p class="subtitle" data-translate="subtitle"><?= e($settings['restaurant_subtitle']) ?></p>
                 </div>
             </div>
         </div>
@@ -124,19 +131,23 @@ while ($item = $stmt->fetch()) {
     <div class="container" id="menu">
         <div class="toolbar">
             <div class="pill-tabs">
-                <button class="pill active" data-cat="all">All Items</button>
+                <button class="pill active" data-cat="all" data-translate="all_items">All Items</button>
                 <?php foreach ($categories as $cat): ?>
-                    <button class="pill" data-cat="<?= e($cat['name']) ?>"><?= e($cat['name']) ?></button>
+                    <button class="pill" data-cat="cat-<?= $cat['id'] ?>" data-cat-en="<?= e($cat['name']) ?>" data-cat-am="<?= e($cat['name_am'] ?: $cat['name']) ?>">
+                        <span class="cat-text"><?= e($cat['name']) ?></span>
+                    </button>
                 <?php endforeach; ?>
             </div>
             <div class="searchbox">
-                <input type="text" placeholder="Search menu..." data-search>
+                <input type="text" placeholder="Search menu..." data-search data-translate-placeholder="search_placeholder">
             </div>
         </div>
 
         <?php foreach ($items_by_category as $cat_name => $items): ?>
-            <div data-catname="<?= e($cat_name) ?>">
-                <h2 class="section-title"><?= e($cat_name) ?></h2>
+            <div data-catname="cat-<?= $items[0]['category_id'] ?>">
+                <h2 class="section-title" data-cat-en="<?= e($cat_name) ?>" data-cat-am="<?= e($items[0]['category_name_am'] ?: $cat_name) ?>">
+                    <span class="cat-title-text"><?= e($cat_name) ?></span>
+                </h2>
                 <div class="menu-grid">
                     <?php foreach ($items as $item): 
                         $avg_rating = round($item['avg_rating'], 1);
@@ -144,15 +155,19 @@ while ($item = $stmt->fetch()) {
                         $has_half = ($avg_rating - $full_stars) >= 0.5;
                         $empty_stars = 5 - $full_stars - ($has_half ? 1 : 0);
                     ?>
-                        <div class="card" data-item="<?= e($item['name'] . ' ' . $item['description']) ?>">
+                        <div class="card" data-item="<?= e($item['name'] . ' ' . $item['description']) ?>" data-item-en="<?= e($item['name'] . ' ' . $item['description']) ?>" data-item-am="<?= e(($item['name_am'] ?: $item['name']) . ' ' . ($item['description_am'] ?: $item['description'])) ?>">
                             <?php if ($item['image_url']): ?>
                                 <img src="<?= e($item['image_url']) ?>" alt="<?= e($item['name']) ?>">
                             <?php else: ?>
                                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23222' width='400' height='300'/%3E%3C/svg%3E" alt="No image">
                             <?php endif; ?>
                             <div class="card-body">
-                                <h3 class="card-title"><?= e($item['name']) ?></h3>
-                                <p class="card-desc"><?= e($item['description'] ?: '') ?></p>
+                                <h3 class="card-title" data-name-en="<?= e($item['name']) ?>" data-name-am="<?= e($item['name_am'] ?: $item['name']) ?>">
+                                    <span class="item-name-text"><?= e($item['name']) ?></span>
+                                </h3>
+                                <p class="card-desc" data-desc-en="<?= e($item['description'] ?: '') ?>" data-desc-am="<?= e($item['description_am'] ?: $item['description'] ?: '') ?>">
+                                    <span class="item-desc-text"><?= e($item['description'] ?: '') ?></span>
+                                </p>
                                 
                                 <?php if ($item['review_count'] > 0): ?>
                                     <div class="rating-bar">
@@ -173,7 +188,7 @@ while ($item = $stmt->fetch()) {
                                 
                                 <div class="row">
                                     <span class="price">ETB <?= number_format($item['price'], 2) ?></span>
-                                    <button class="btn btn-outline" onclick="openReviewModal(<?= $item['id'] ?>, '<?= e($item['name']) ?>')">
+                                    <button class="btn btn-outline" onclick="openReviewModal(<?= $item['id'] ?>, '<?= e($item['name']) ?>')" data-translate="reviews_btn">
                                         Reviews
                                     </button>
                                 </div>
@@ -186,56 +201,56 @@ while ($item = $stmt->fetch()) {
 
         <?php if (empty($items_by_category)): ?>
             <div style="text-align: center; padding: 60px 20px; color: var(--muted);">
-                <p>No menu items available at the moment.</p>
+                <p data-translate="no_menu_items">No menu items available at the moment.</p>
             </div>
         <?php endif; ?>
         
         <section id="feedback" style="margin-top: 60px; padding: 40px; background: white; border-radius: 16px; box-shadow: var(--shadow);">
-            <h2 class="section-title">Feedback</h2>
-            <p style="color: var(--muted); margin-bottom: 24px;">We value your feedback! Let us know how we can improve your experience.</p>
+            <h2 class="section-title" data-translate="feedback_title">Feedback</h2>
+            <p style="color: var(--muted); margin-bottom: 24px;" data-translate="feedback_desc">We value your feedback! Let us know how we can improve your experience.</p>
             <form style="max-width: 600px;">
                 <div class="form-group">
-                    <label>Your Name</label>
-                    <input type="text" placeholder="Enter your name" required>
+                    <label data-translate="your_name">Your Name</label>
+                    <input type="text" placeholder="Enter your name" data-translate-placeholder="name_placeholder" required>
                 </div>
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="your@email.com" required>
+                    <label data-translate="email_address">Email Address</label>
+                    <input type="email" placeholder="your@email.com" data-translate-placeholder="email_placeholder" required>
                 </div>
                 <div class="form-group">
-                    <label>Your Feedback</label>
-                    <textarea placeholder="Share your thoughts with us..." rows="5" required></textarea>
+                    <label data-translate="your_feedback_label">Your Feedback</label>
+                    <textarea placeholder="Share your thoughts with us..." data-translate-placeholder="feedback_placeholder" rows="5" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                <button type="submit" class="btn btn-primary" data-translate="submit_feedback">Submit Feedback</button>
             </form>
         </section>
         
         <section id="contact" style="margin-top: 40px; padding: 40px; background: white; border-radius: 16px; box-shadow: var(--shadow);">
-            <h2 class="section-title">Contact Us</h2>
+            <h2 class="section-title" data-translate="contact_title">Contact Us</h2>
             <div style="display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
                 <div>
-                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">📍 Location</h3>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;" data-translate="location">📍 Location</h3>
                     <p style="color: var(--muted);">123 Coffee Street<br>Addis Ababa, Ethiopia</p>
                 </div>
                 <div>
-                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">📞 Phone</h3>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;" data-translate="phone">📞 Phone</h3>
                     <p style="color: var(--muted);">+251 11 123 4567<br>+251 91 234 5678</p>
                 </div>
                 <div>
-                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">⏰ Hours</h3>
-                    <p style="color: var(--muted);">Mon-Fri: 7:00 AM - 8:00 PM<br>Sat-Sun: 8:00 AM - 9:00 PM</p>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;" data-translate="hours">⏰ Hours</h3>
+                    <p style="color: var(--muted);" data-translate="hours_detail">Mon-Fri: 7:00 AM - 8:00 PM<br>Sat-Sun: 8:00 AM - 9:00 PM</p>
                 </div>
                 <div>
-                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;">✉️ Email</h3>
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 12px;" data-translate="email">✉️ Email</h3>
                     <p style="color: var(--muted);">info@fujicafe.com<br>support@fujicafe.com</p>
                 </div>
             </div>
         </section>
         
         <section id="review" style="margin: 40px 0 60px; padding: 40px; background: white; border-radius: 16px; box-shadow: var(--shadow);">
-            <h2 class="section-title">Leave a Review</h2>
-            <p style="color: var(--muted); margin-bottom: 24px;">Share your experience with us and help others discover great items!</p>
-            <p style="color: var(--text);">Click the "Reviews" button on any menu item above to leave your feedback.</p>
+            <h2 class="section-title" data-translate="leave_review">Leave a Review</h2>
+            <p style="color: var(--muted); margin-bottom: 24px;" data-translate="review_desc">Share your experience with us and help others discover great items!</p>
+            <p style="color: var(--text);" data-translate="review_instruction">Click the "Reviews" button on any menu item above to leave your feedback.</p>
         </section>
     </div>
 
@@ -249,12 +264,12 @@ while ($item = $stmt->fetch()) {
                 <div id="reviewsList"></div>
                 
                 <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
-                    <h3 style="margin-top: 0; font-size: 18px;">Leave a Review</h3>
+                    <h3 style="margin-top: 0; font-size: 18px;" data-translate="leave_review">Leave a Review</h3>
                     <form id="reviewForm" onsubmit="submitReview(event)">
                         <input type="hidden" id="itemId" name="item_id">
                         
                         <div class="form-group">
-                            <label>Your Rating</label>
+                            <label data-translate="your_rating">Your Rating</label>
                             <div class="star-rating" id="starRating">
                                 <button type="button" class="star-btn" data-rating="1">★</button>
                                 <button type="button" class="star-btn" data-rating="2">★</button>
@@ -266,16 +281,16 @@ while ($item = $stmt->fetch()) {
                         </div>
                         
                         <div class="form-group">
-                            <label>Your Name (optional)</label>
-                            <input type="text" name="customer_name" placeholder="Anonymous" maxlength="100">
+                            <label data-translate="your_name_optional">Your Name (optional)</label>
+                            <input type="text" name="customer_name" placeholder="Anonymous" data-translate-placeholder="anonymous" maxlength="100">
                         </div>
                         
                         <div class="form-group">
-                            <label>Your Review</label>
-                            <textarea name="comment" placeholder="Share your experience..." rows="4"></textarea>
+                            <label data-translate="your_review">Your Review</label>
+                            <textarea name="comment" placeholder="Share your experience..." data-translate-placeholder="review_placeholder" rows="4"></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Review</button>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;" data-translate="submit_review">Submit Review</button>
                     </form>
                 </div>
             </div>
