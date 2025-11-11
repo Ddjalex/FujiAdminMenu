@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = trim($_POST['name'] ?? '');
         $price = trim($_POST['price'] ?? '');
         $description = trim($_POST['description'] ?? '');
+        $tiktok_link = trim($_POST['tiktok_link'] ?? '');
         $is_active = isset($_POST['is_active']) ? 1 : 0;
         $position = (int)($_POST['position'] ?? 0);
         $image_url = $_POST['existing_image_url'] ?? '';
@@ -38,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($errors)) {
             if ($action === 'create') {
-                $stmt = $pdo->prepare("INSERT INTO menu_items (category_id, name, price, description, image_url, is_active, position) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$category_id, $name, $price, $description, $image_url, $is_active, $position]);
+                $stmt = $pdo->prepare("INSERT INTO menu_items (category_id, name, price, description, tiktok_link, image_url, is_active, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$category_id, $name, $price, $description, $tiktok_link, $image_url, $is_active, $position]);
                 flash('success', 'Menu item created successfully');
                 redirect('items.php');
             } else {
-                $stmt = $pdo->prepare("UPDATE menu_items SET category_id = ?, name = ?, price = ?, description = ?, image_url = ?, is_active = ?, position = ? WHERE id = ?");
-                $stmt->execute([$category_id, $name, $price, $description, $image_url, $is_active, $position, $id]);
+                $stmt = $pdo->prepare("UPDATE menu_items SET category_id = ?, name = ?, price = ?, description = ?, tiktok_link = ?, image_url = ?, is_active = ?, position = ? WHERE id = ?");
+                $stmt->execute([$category_id, $name, $price, $description, $tiktok_link, $image_url, $is_active, $position, $id]);
                 flash('success', 'Menu item updated successfully');
                 redirect('items.php');
             }
@@ -188,6 +189,21 @@ $csrf_token = generate_csrf_token();
                     <label style="display: block; margin-bottom: 6px; font-weight: 500;">Description</label>
                     <textarea name="description" rows="3" 
                               style="width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 15px; resize: vertical;"><?= e(old('description', $item['description'] ?? '')) ?></textarea>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 6px; font-weight: 500;">TikTok Link (Optional)</label>
+                    <input type="url" name="tiktok_link" value="<?= e(old('tiktok_link', $item['tiktok_link'] ?? '')) ?>" 
+                           placeholder="https://www.tiktok.com/@username/video/..." 
+                           style="width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 15px;">
+                    <div style="background: #1a2a3a; border: 1px solid #2a4a6a; border-radius: 8px; padding: 10px; margin-top: 8px;">
+                        <div style="display: flex; align-items: start; gap: 8px;">
+                            <span style="font-size: 18px; flex-shrink: 0;">ℹ️</span>
+                            <div style="font-size: 13px; color: #90c5ff;">
+                                <strong>TikTok Video Link:</strong> Add a TikTok video link to showcase your menu item. When you add a link here, customers will see a TikTok icon on the menu that links directly to your video. Perfect for showing how drinks are made or highlighting special items!
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div style="margin-bottom: 20px;">

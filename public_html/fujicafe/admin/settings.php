@@ -16,6 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $restaurant_name = trim($_POST['restaurant_name'] ?? '');
     $restaurant_subtitle = trim($_POST['restaurant_subtitle'] ?? '');
+    $facebook_url = trim($_POST['facebook_url'] ?? '');
+    $instagram_url = trim($_POST['instagram_url'] ?? '');
+    $tiktok_url = trim($_POST['tiktok_url'] ?? '');
+    $twitter_url = trim($_POST['twitter_url'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $address = trim($_POST['address'] ?? '');
     
     if (empty($restaurant_name)) {
         flash('error', 'Restaurant name is required');
@@ -71,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
-    $stmt = $pdo->prepare("UPDATE restaurant_settings SET restaurant_name = ?, restaurant_subtitle = ?, logo_url = ?, updated_at = NOW() WHERE id = ?");
-    $stmt->execute([$restaurant_name, $restaurant_subtitle, $logo_url, $settings['id']]);
+    $stmt = $pdo->prepare("UPDATE restaurant_settings SET restaurant_name = ?, restaurant_subtitle = ?, logo_url = ?, facebook_url = ?, instagram_url = ?, tiktok_url = ?, twitter_url = ?, phone = ?, email = ?, address = ?, updated_at = NOW() WHERE id = ?");
+    $stmt->execute([$restaurant_name, $restaurant_subtitle, $logo_url, $facebook_url, $instagram_url, $tiktok_url, $twitter_url, $phone, $email, $address, $settings['id']]);
     
     flash('success', 'Settings updated successfully!');
     redirect('settings.php');
@@ -139,6 +146,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label>Restaurant Subtitle</label>
                     <input type="text" name="restaurant_subtitle" value="<?= e($settings['restaurant_subtitle']) ?>" maxlength="200" placeholder="e.g., Artisan Coffee & Fresh Cuisine">
+                </div>
+
+                <h2 style="margin-top: 40px; margin-bottom: 20px;">Social Media Links</h2>
+                
+                <div class="form-group">
+                    <label>Facebook URL</label>
+                    <input type="url" name="facebook_url" value="<?= e($settings['facebook_url'] ?? '') ?>" placeholder="https://facebook.com/yourpage">
+                </div>
+
+                <div class="form-group">
+                    <label>Instagram URL</label>
+                    <input type="url" name="instagram_url" value="<?= e($settings['instagram_url'] ?? '') ?>" placeholder="https://instagram.com/youraccount">
+                </div>
+
+                <div class="form-group">
+                    <label>TikTok URL</label>
+                    <input type="url" name="tiktok_url" value="<?= e($settings['tiktok_url'] ?? '') ?>" placeholder="https://tiktok.com/@youraccount">
+                </div>
+
+                <div class="form-group">
+                    <label>Twitter URL</label>
+                    <input type="url" name="twitter_url" value="<?= e($settings['twitter_url'] ?? '') ?>" placeholder="https://twitter.com/youraccount">
+                </div>
+
+                <h2 style="margin-top: 40px; margin-bottom: 20px;">Contact Information</h2>
+                
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" value="<?= e($settings['phone'] ?? '') ?>" placeholder="+251 11 123 4567">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" value="<?= e($settings['email'] ?? '') ?>" placeholder="info@restaurant.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea name="address" rows="3" placeholder="123 Coffee Street, Addis Ababa, Ethiopia"><?= e($settings['address'] ?? '') ?></textarea>
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
